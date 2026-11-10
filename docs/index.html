@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kurzweil 1000 (K1000) Mod: custom samples + K1000 Studio | Rosetta</title>
+<meta name="description" content="Kurzweil 1000 / K1000 mod: fill the empty wave ROM sockets in a 1000 GX with your own WAVs. K1000 Studio adds them as new patches and keeps every factory sound. Free and open source, hardware test in progress.">
+<meta name="keywords" content="Kurzweil 1000, K1000, Kurzweil K1000 mod, Kurzweil 1000 GX, 1000GX, Kurzweil 1000 custom samples, Kurzweil wave ROM, K1000 sample format, K1000 ROM, 1000 PX Plus, 1000 SX, 1000 HX, W27C040, ROM mod">
+<link rel="icon" type="image/png" href="img/hexgirl_icon.png">
+<link rel="canonical" href="https://yuyoi.github.io/Kurzweil-1000-Rosetta/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kurzweil 1000 (K1000) Mod: your own samples in the empty ROM sockets">
+<meta property="og:description" content="K1000 Studio turns WAVs into wave ROMs and new patches for the Kurzweil 1000 GX. Factory sounds stay. Hardware test in progress.">
+<meta property="og:url" content="https://yuyoi.github.io/Kurzweil-1000-Rosetta/">
+<meta property="og:image" content="https://yuyoi.github.io/Kurzweil-1000-Rosetta/img/k1000studio.png">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"K1000 Studio (Kurzweil 1000 Rosetta)","applicationCategory":"MultimediaApplication","operatingSystem":"Windows, Python 3.10+","description":"WAV to wave ROM and patch builder for the Kurzweil 1000 GX rack expander.","url":"https://yuyoi.github.io/Kurzweil-1000-Rosetta/","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"Can you add your own samples to a Kurzweil 1000?","acceptedAnswer":{"@type":"Answer","text":"K1000 Studio builds wave ROM and SETUP chip images that add your WAVs as new patches on a Kurzweil 1000 GX. The images are checked in software. The first test on real hardware is still to come."}},
+{"@type":"Question","name":"What is the Kurzweil 1000 sample format?","acceptedAnswer":{"@type":"Answer","text":"Each bank is three 512 KB chips, X, Y and Z, holding pairs of 12-bit sign-magnitude samples, about one million samples per bank. The base rate works out to about 30.2 kHz."}},
+{"@type":"Question","name":"Which chips fit the Kurzweil 1000 wave ROM sockets?","acceptedAnswer":{"@type":"Answer","text":"W27C040 512 KB chips. The GX leaves banks 2 and 3 empty: U60, U52, U56 and U61, U53, U57."}},
+{"@type":"Question","name":"How much sample time fits in a Kurzweil 1000 GX?","acceptedAnswer":{"@type":"Answer","text":"Two free banks hold about 69 seconds at 30 kHz, or up to 278 seconds at 7.5 kHz."}},
+{"@type":"Question","name":"Does the mod replace the factory sounds?","acceptedAnswer":{"@type":"Answer","text":"No. New patches are appended at numbers 160 to 192 and the factory data stays byte for byte. Keep your original U22 and U33 chips to go back."}},
+{"@type":"Question","name":"Does it work on the 1000 PX Plus, SX or HX?","acceptedAnswer":{"@type":"Answer","text":"Not yet. K1000 Studio currently supports the 1000 GX with SETUP V2.5."}}
+]}
+</script>
+<style>
+:root{--bg:#f6f6f3;--paper:#fff;--fg:#17181a;--muted:#5c5f63;--rule:#d6d7d2;--bar:#17181a;--bar-fg:#f6f6f3;--accent:#0b7a4b;--term:#05080c;--term-ink:#39ff88}
+@media (prefers-color-scheme:dark){:root{--bg:#121314;--paper:#1b1c1e;--fg:#ececea;--muted:#a3a6aa;--rule:#2e3033;--bar:#ececea;--bar-fg:#121314;--accent:#3dd48a}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.6 "Helvetica Neue",Arial,sans-serif}
+.wrap{max-width:920px;margin:0 auto;padding:0 16px}
+header{padding:40px 0 24px;text-align:center}
+header img.hero{width:200px;height:200px}
+h1{font-size:2rem;line-height:1.2;margin:16px 0 8px}
+.lede{color:var(--muted);font-size:1.1rem;margin:0 auto;max-width:640px}
+.term{display:inline-block;margin:20px 0 0;background:var(--term);color:var(--term-ink);font:700 1rem/1.3 Consolas,"Courier New",monospace;padding:10px 16px;border-radius:4px;letter-spacing:.04em;max-width:100%}
+.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin:24px 0 8px}
+.btn{display:inline-block;padding:12px 18px;border-radius:6px;background:var(--accent);color:#fff;text-decoration:none;font-weight:700}
+.btn.alt{background:transparent;color:var(--fg);border:2px solid var(--fg)}
+h2{background:var(--bar);color:var(--bar-fg);font-size:1rem;letter-spacing:.08em;text-transform:uppercase;padding:8px 12px;margin:40px 0 16px}
+h3{font-size:1.05rem;margin:20px 0 4px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:12px}
+.card{background:var(--paper);border:1px solid var(--rule);border-radius:6px;padding:14px 16px}
+.card b{display:block;margin-bottom:4px}
+.card span{color:var(--muted);font-size:.95rem}
+figure{margin:16px 0;text-align:center}
+figure img{max-width:100%;border:1px solid var(--rule);border-radius:4px}
+ol li,ul li{margin:6px 0}
+code{font-family:Consolas,"Courier New",monospace;font-size:.95em;overflow-wrap:anywhere}
+footer{color:var(--muted);font-size:.9rem;padding:40px 0;border-top:1px solid var(--rule);margin-top:40px}
+a{color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<img class="hero" src="img/hexgirl_icon.png" alt="Rosetta badge">
+<h1>Kurzweil 1000 mod: your own samples in the empty ROM sockets</h1>
+<p class="lede">The Kurzweil 1000 GX (K1000) leaves half of its wave ROM sockets empty. K1000 Studio fills them from WAV files and adds each sound as a new patch.</p>
+<div class="term">STATUS: HARDWARE TEST IN PROGRESS</div>
+<div class="cta">
+<a class="btn" href="https://github.com/yuyoi/Kurzweil-1000-Rosetta">Get it on GitHub</a>
+<a class="btn alt" href="https://github.com/yuyoi/Kurzweil-1000-Rosetta/blob/main/docs/FINDINGS.md">Read the format notes</a>
+</div>
+</header>
+
+<figure><img src="img/k1000studio.png" alt="K1000 Studio showing a waveform, loop markers and chip burn buttons" width="820"></figure>
+
+<h2>What it does</h2>
+<div class="grid">
+<div class="card"><b>33 new patches</b><span>Numbers 160 to 192, named on the LCD. Factory sounds stay byte for byte.</span></div>
+<div class="card"><b>69 s at 30 kHz</b><span>Two free banks, up to 278 s at the 7.5 kHz crunch setting.</span></div>
+<div class="card"><b>Trim and loop</b><span>Drag markers on the waveform, snap to zero crossings, reverse.</span></div>
+<div class="card"><b>Hear it first</b><span>Preview the 12-bit data before you burn anything.</span></div>
+<div class="card"><b>Checked images</b><span>Every build is read back and checked against what you asked for.</span></div>
+<div class="card"><b>Burn from the app</b><span>One button per chip, to an XGecu T48 through minipro.</span></div>
+</div>
+
+<h2>What you need</h2>
+<ul>
+<li>A Kurzweil 1000 GX with SETUP V2.5, and your own dump of U22 and U33.</li>
+<li>W27C040 chips, three per bank: U60, U52, U56 for bank 2 and U61, U53, U57 for bank 3.</li>
+<li>Two W27C512 chips for the new SETUP. Keep the originals.</li>
+<li>Windows, Python 3.10+, and a T48 programmer.</li>
+</ul>
+
+<h2>Status</h2>
+<p>The wave and SETUP formats are decoded and checked against factory data, and the chip images pass verification in software. The first burn and listening test on a real GX are next. PX Plus, SX and HX aren't supported yet.</p>
+
+<h2>Questions</h2>
+<h3>What is the Kurzweil 1000 sample format?</h3>
+<p>Each bank is three 512 KB chips holding pairs of 12-bit sign-magnitude samples, about one million per bank. The base rate works out to about 30.2 kHz.</p>
+<h3>Does this replace the factory sounds?</h3>
+<p>No. New patches are appended after them. Put your original U22 and U33 back and the unit is stock.</p>
+
+<footer>Free and open source (MIT). No Kurzweil ROM data included. Kurzweil is a trademark of its owner, and this project isn't affiliated with it. Hardware notes from <a href="http://k1000.net">k1000.net</a>. Built by JSW and Claude.</footer>
+</div>
+</body>
+</html>

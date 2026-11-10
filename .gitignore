@@ -1,0 +1,17 @@
+# Whitelist: Kurzweil dumps, builds and audio can never be added.
+/*
+!/.gitignore
+!/README.md
+!/LICENSE
+!/requirements.txt
+!/k1000studio.pyw
+!/k1000engine.py
+!/hexgirl_icon.png
+!/assets/
+!/docs/
+!/tests/
+*.bin
+*.wav
+*.lst
+*.zip
+__pycache__/
